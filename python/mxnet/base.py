@@ -31,10 +31,20 @@ class MXNetError(Exception):
 
 def _load_lib():
     """Load libary by searching possible path."""
-    lib_path = libinfo.find_lib_path()
-    lib = ctypes.cdll.LoadLibrary(lib_path[0])
-    # DMatrix functions
-    lib.MXGetLastError.restype = ctypes.c_char_p
+    import os.path
+    from glob import glob
+    lib = None
+    for lib_path in glob(os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), 'lib/libmxnet*.so')):
+        try:
+            lib = ctypes.cdll.LoadLibrary(lib_path)
+            # DMatrix functions
+            lib.MXGetLastError.restype = ctypes.c_char_p
+            break
+        except (MXNetError, IOError, OSError):
+            pass
+    if not lib:
+        raise MXNetError("libmxnet.so not found or no suitable version for this platform.")
     return lib
 
 # version number
