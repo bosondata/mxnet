@@ -26,5 +26,5 @@ setup(name='mxnet',
       ],
       zip_safe=False,
       packages=['mxnet', 'mxnet.module'],
-      package_data={'mxnet': ['lib/libmxnet.so', 'lib/libmxnet-centos.so', 'lib/libmxnet-ubuntu.so']},
+      package_data={'mxnet': ['lib/*.so']},
       url='https://github.com/dmlc/mxnet')

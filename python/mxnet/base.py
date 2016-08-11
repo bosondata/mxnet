@@ -32,11 +32,11 @@ class MXNetError(Exception):
 def _load_lib():
     """Load libary by searching possible path."""
     import os.path
+    from glob import glob
     lib = None
-    for lib_so in ('libmxnet.so', 'libmxnet-ubuntu.so', 'libmxnet-centos.so'):
+    for lib_path in glob(os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), 'lib/libmxnet*.so')):
         try:
-            lib_path = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)), 'lib/{}'.format(lib_so))
             lib = ctypes.cdll.LoadLibrary(lib_path)
             # DMatrix functions
             lib.MXGetLastError.restype = ctypes.c_char_p
